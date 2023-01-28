@@ -1,17 +1,55 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import store from "./redux/store";
+import "./index.css";
+import App from "./App";
+import {
+  FeedbackDetailPage,
+  FeedbackEditForm,
+  NewFeedbackForm,
+  RoadmapPage,
+  SuggestionsPage,
+} from "./components/pages/index";
+import { loader as getPostID } from "./components/pages/feed-back-detail-page/feedback-detail.component";
+import { loader as editPostID } from "./components/pages/feedback-edit/edit-feedback.component";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        path: "/",
+        element: <SuggestionsPage />,
+      },
+      {
+        path: "feedback/:requestID",
+        element: <FeedbackDetailPage />,
+        loader: getPostID,
+      },
+      {
+        path: "edit/:requestID",
+        element: <FeedbackEditForm />,
+        loader: editPostID,
+      },
+      {
+        path: "new-feedback",
+        element: <NewFeedbackForm />,
+      },
+      {
+        path: "roadmap",
+        element: <RoadmapPage />,
+      },
+    ],
+  },
+]);
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
