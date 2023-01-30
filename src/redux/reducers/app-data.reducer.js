@@ -1,6 +1,4 @@
-import { getData } from "../../firebase/firebase.utils";
-
-// const app_Data = getData();
+// import { getData } from "../../firebase/firebase.utils";
 
 const app_Data = require("../data.json");
 
