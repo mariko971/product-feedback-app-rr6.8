@@ -1,9 +1,29 @@
-// import { getData } from "../../firebase/firebase.utils";
+import {
+  addCommentFire,
+  editFeedbackFire,
+  deleteFeedbackFire,
+  replyToCommentFire,
+  upvoteActionFire,
+  addFeedbackFire,
+} from "../../firebase/firebase.utils";
 
-const app_Data = require("../data.json");
+//const app_Data = require("../data.json");
+const app_Data = { productRequests: [], currentUser: {} };
 
 const appDataReducer = (state = app_Data, action) => {
   switch (action.type) {
+    case "UPDATE_REQUESTS": {
+      return {
+        ...state,
+        productRequests: [...action.payload],
+      };
+    }
+    case "UPDATE_CURRENT_USER": {
+      return {
+        ...state,
+        currentUser: { ...action.payload },
+      };
+    }
     case "most votes": {
       return {
         ...state,
@@ -44,7 +64,7 @@ const appDataReducer = (state = app_Data, action) => {
         ],
       };
     }
-    case "UPVOTER": {
+    case "UPVOTE_COMMENT": {
       const req = state.productRequests.find(
         (request) => request.id === action.payload
       );
@@ -53,20 +73,30 @@ const appDataReducer = (state = app_Data, action) => {
       let tempReq = { ...newproductRequests[reqIndex] };
       tempReq.upvotes = tempReq.upvotes + 1;
       newproductRequests[reqIndex] = tempReq;
+      upvoteActionFire(action.payload);
       return {
         ...state,
         productRequests: [...newproductRequests],
       };
     }
+    case "ADD_FEEDBACK": {
+      const tempProductRequests = [...state.productRequests];
+      tempProductRequests.push(action.payload);
+      addFeedbackFire("productRequests", action.payload);
+      return {
+        ...state,
+        productRequests: [...tempProductRequests],
+      };
+    }
     case "POST_COMMENT": {
-      const req = state.productRequests.find(
-        (request) => request.id === action.payload.id
-      );
+      const { id, comment } = action.payload;
+      const req = state.productRequests.find((request) => request.id === id);
       const reqIndex = state.productRequests.indexOf(req);
       let newproductRequests = [...state.productRequests];
       let tempReq = { ...newproductRequests[reqIndex] };
       let tempComments = [...tempReq.comments];
-      tempComments.push(action.payload.comment);
+      tempComments.push(comment);
+      addCommentFire(id, comment);
       tempReq.comments = tempComments;
       newproductRequests[reqIndex] = tempReq;
       return {
@@ -75,12 +105,12 @@ const appDataReducer = (state = app_Data, action) => {
       };
     }
     case "SAVE_CHANGES": {
-      const req = state.productRequests.find(
-        (request) => request.id === action.payload.id
-      );
+      const { id, changes } = action.payload;
+      const req = state.productRequests.find((request) => request.id === id);
       const reqIndex = state.productRequests.indexOf(req);
       let newproductRequests = [...state.productRequests];
-      newproductRequests[reqIndex] = { ...action.payload.changes };
+      newproductRequests[reqIndex] = { ...changes };
+      editFeedbackFire(id, changes);
       return {
         ...state,
         productRequests: [...newproductRequests],
@@ -92,29 +122,32 @@ const appDataReducer = (state = app_Data, action) => {
         (request) => request.id === action.payload
       );
       newproductRequests.splice(req, 1);
+      deleteFeedbackFire(action.payload);
       return {
         ...state,
         productRequests: [...newproductRequests],
       };
     }
     case "REPLY_TO_COMMENT": {
+      const { id, reply } = action.payload;
       let newproductRequests = [...state.productRequests];
       const reqIndex = newproductRequests.findIndex(
-        (request) => request.id === action.payload.id.requestID
+        (request) => request.id === id.requestID
       );
       let newReq = { ...newproductRequests[reqIndex] };
       let newReqComments = [...newReq.comments];
       let commentIndex = newReqComments.findIndex(
-        (comment) => comment.id === action.payload.id.commentID
+        (comment) => comment.id === id.commentID
       );
       let newComment = { ...newReqComments[commentIndex] };
       let newCommentReps = newComment.replies
         ? [...newComment.replies]
         : (newComment.replies = []);
-      newCommentReps.push(action.payload.reply);
+      newCommentReps.push(reply);
       newComment.replies = newCommentReps;
       newReqComments[commentIndex] = newComment;
       newReq.comments = newReqComments;
+      replyToCommentFire(id.requestID, newReqComments);
       newproductRequests[reqIndex] = newReq;
 
       return {

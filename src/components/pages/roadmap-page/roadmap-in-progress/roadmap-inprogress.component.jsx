@@ -3,8 +3,8 @@ import React from "react";
 import { connect } from "react-redux";
 
 import "./roadmap-inprogress.style.scss";
-import { commentsCount } from "../../suggestions-page/suggestions-page-main/suggestion/suggestion.component";
-import { upvoterAction } from "../../../../redux/actions/upvote.action";
+import { commentsCount } from "../../../utils";
+import { upvoteAction } from "../../../../redux/actions/appData.action";
 
 const RoadmapInProgress = (props) => {
   const {
@@ -14,15 +14,22 @@ const RoadmapInProgress = (props) => {
     category,
     upvotes,
     comments,
-    appDataReducer,
+    //productRequests,
+    currentUser,
+    upvoteAction,
   } = props;
+
+  const voted = currentUser.votes.includes(`${id}`) ? "voted" : "";
+  // const request = productRequests.findIndex((req) => req.id === id);
+
+  const voteAction = () => (!voted ? upvoteAction(id) : null);
 
   return (
     <div className="inprogress">
       <div className="inprogress-suggestion progress">
         <div
-          className="inprogress-suggestion-upvote"
-          onClick={() => appDataReducer(id)}
+          className={`inprogress-suggestion-upvote ${voted}`}
+          onClick={() => voteAction()}
         >
           <div className="inprogress-suggestion-upvote-arrow">
             <img src="/assets/shared/icon-arrow-up-blue.svg" alt="up arrow" />
@@ -50,8 +57,13 @@ const RoadmapInProgress = (props) => {
   );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  appDataReducer: (id) => dispatch(upvoterAction(id)),
+const mapStateToProps = (state) => ({
+  productRequests: state.appData.productRequests,
+  currentUser: state.appData.currentUser,
 });
 
-export default connect(null, mapDispatchToProps)(RoadmapInProgress);
+const mapDispatchToProps = (dispatch) => ({
+  upvoteAction: (id) => dispatch(upvoteAction(id)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(RoadmapInProgress);

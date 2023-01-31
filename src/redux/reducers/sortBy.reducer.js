@@ -1,18 +1,17 @@
-
 const sortInit = {
-    sortBy: 'most votes'
+  sortBy: "",
 };
 
-const sortByReducer = (state = sortInit, action)=>{
-    switch(action.type){
-        case 'SET_SORTBY':
-            return {
-                ...state,
-                sortBy: action.payload
-            }
-            default: 
-            return state;        
-    }    
-}
+const sortByReducer = (state = sortInit, action) => {
+  switch (action.type) {
+    case "SET_SORTBY":
+      return {
+        ...state,
+        sortBy: action.payload,
+      };
+    default:
+      return state;
+  }
+};
 
 export default sortByReducer;
