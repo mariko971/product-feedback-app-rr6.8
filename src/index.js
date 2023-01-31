@@ -15,11 +15,13 @@ import {
 } from "./components/pages/index";
 import { loader as getPostID } from "./components/pages/feed-back-detail-page/feedback-detail.component";
 import { loader as editPostID } from "./components/pages/feedback-edit/edit-feedback.component";
+import { loader as getData } from "./App";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    loader: getData,
     children: [
       {
         path: "/",
