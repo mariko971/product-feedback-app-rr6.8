@@ -3,19 +3,8 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 import "./suggestion.style.scss";
-import { upvoterAction } from "../../../../../redux/actions/upvote.action";
-
-export const commentsCount = (comments) => {
-  let count = comments.length;
-  if (comments.length > 0) {
-    comments.map((comment) =>
-      Object.keys(comment).includes("replies")
-        ? (count += comment.replies.length)
-        : count
-    );
-    return count;
-  } else return count;
-};
+import { upvoteAction } from "../../../../../redux/actions/appData.action";
+import { commentsCount } from "../../../../utils";
 
 const Suggestion = (props) => {
   const {
@@ -25,13 +14,29 @@ const Suggestion = (props) => {
     category,
     upvotes,
     comments,
-    appDataReducer,
+    currentUser,
+    upvoteAction,
   } = props;
+
+  const voted = currentUser.votes.includes(id.toString()) ? "voted" : "";
+  console.log(voted);
+
+  const voteAction = () => (!voted ? upvoteAction(id) : null);
 
   return (
     <div className="suggestion-container">
-      <div className="suggestion-upvote" onClick={() => appDataReducer(id)}>
-        <img src="/assets/shared/icon-arrow-up-blue.svg" alt="up arrow" />
+      <div
+        className={`suggestion-upvote ${voted}`}
+        onClick={() => voteAction()}
+      >
+        <img
+          src={
+            !voted
+              ? "/assets/shared/icon-arrow-up-blue.svg"
+              : "/assets/shared/icon-arrow-up-white.svg"
+          }
+          alt="up arrow"
+        />
         <p className="suggestion-upvote-votes">{upvotes}</p>
       </div>
       <Link to={`/feedback/${id}`} id="suggestion-link">
@@ -53,7 +58,10 @@ const Suggestion = (props) => {
   );
 };
 const mapDispatchToProps = (dispatch) => ({
-  appDataReducer: (id) => dispatch(upvoterAction(id)),
+  upvoteAction: (id) => dispatch(upvoteAction(id)),
+});
+const mapStateToProps = (state) => ({
+  currentUser: state.appData.currentUser,
 });
 
-export default connect(null, mapDispatchToProps)(Suggestion);
+export default connect(mapStateToProps, mapDispatchToProps)(Suggestion);

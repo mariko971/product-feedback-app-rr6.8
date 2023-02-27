@@ -63,5 +63,5 @@ export const deleteFeedbackAction = (id) => ({
 
 export const upvoteAction = (id) => ({
   type: "UPVOTE_COMMENT",
-  paylod: id,
+  payload: id,
 });

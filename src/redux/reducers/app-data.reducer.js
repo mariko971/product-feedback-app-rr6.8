@@ -7,7 +7,6 @@ import {
   addFeedbackFire,
 } from "../../firebase/firebase.utils";
 
-//const app_Data = require("../data.json");
 const app_Data = { productRequests: [], currentUser: {} };
 
 const appDataReducer = (state = app_Data, action) => {

@@ -101,6 +101,13 @@ $upvote-hover-clr: #cfd7ff;
       color: $navy-blue-light30-clr;
     }
   }
+  .voted {
+    background-color: $blue-clr;
+    pointer-events: none;
+    p {
+      color: $white-clr;
+    }
+  }
 }
 
 @media screen and (min-width: 768px) {
