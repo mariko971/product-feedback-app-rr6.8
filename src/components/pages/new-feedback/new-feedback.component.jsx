@@ -1,12 +1,30 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { connect } from "react-redux";
 
 import "./new-feedback.style.scss";
 
-const NewFeedbackForm = (props) => {
+import { addFeedbackAction } from "../../../redux/actions/appData.action";
+import { validateInfo } from "../../utils";
+
+const NewFeedbackForm = ({ productRequests }) => {
   const [category, setCategory] = useState("");
   const [dropdown, toggleDropdown] = useState({ open: false, class: "" });
-  const [value, setValue] = useState("");
+  const [detailValue, setDetailValue] = useState("");
+  const [titleValue, setTitleValue] = useState("");
+  const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
+
+  const newID = () => Math.max(...productRequests.map((req) => req.id)) + 1;
+
+  const newFeedback = {
+    id: newID(),
+    title: titleValue,
+    category: category,
+    upvotes: 0,
+    status: "suggestion",
+    description: detailValue,
+  };
 
   const handleClick = (option) => {
     setCategory(option);
@@ -21,7 +39,19 @@ const NewFeedbackForm = (props) => {
     }
   };
 
-  const handleChange = (e) => setValue(e.target.value);
+  const handleChangeDetail = (e) => setDetailValue(e.target.value);
+  const handleChangeTitle = (e) => setTitleValue(e.target.value);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setErrors(validateInfo(newFeedback));
+    if (titleValue && detailValue) {
+      if (category) {
+        addFeedbackAction(newFeedback);
+        navigate("/");
+      }
+    }
+  };
 
   const checkSelected = (cat) =>
     category === cat ? (
@@ -40,20 +70,30 @@ const NewFeedbackForm = (props) => {
         />
         <span className="back-link-txt">Go Back</span>
       </Link>
-      <div className="new-feedback">
+      <form className="new-feedback" onSubmit={handleSubmit}>
         <div className="new-feedback-icon">
           <img src="/assets/shared/icon-new-feedback.svg" alt="icon" />
         </div>
         <h1 className="new-feedback-header">Create New Feedback</h1>
-        <div className="new-feedback-input title">
+        <div className={`new-feedback-input ${errors.title ? "error" : ""}`}>
           <p className="title">Feedback Title</p>
           <p className="txt">Add a short, descriptive headline</p>
-          <input type="text" name="feedback title" className="feedback-title" />
+          <input
+            type="text"
+            value={titleValue}
+            name="feedback title"
+            className="feedback-title"
+            onChange={handleChangeTitle}
+          />
+          {errors.title && <p className="error-msg">{errors.title}</p>}
         </div>
         <div className="new-feedback-input category">
           <p className="title">Category</p>
           <p className="txt">Choose a category for your feedback</p>
-          <div className="category-input" onClick={() => toggleOptions()}>
+          <div
+            className={`category-input ${errors.category ? "error" : ""}`}
+            onClick={() => toggleOptions()}
+          >
             <p className="category-input-txt">{category}</p>
             <p className="dropdown-arrow">
               <img
@@ -62,6 +102,7 @@ const NewFeedbackForm = (props) => {
               />
             </p>
           </div>
+          {errors.category && <p className="error-msg">{errors.category}</p>}
           <ul className={`category-dropdown ${dropdown.class}`}>
             <li
               className="category-option"
@@ -91,13 +132,21 @@ const NewFeedbackForm = (props) => {
             </li>
           </ul>
         </div>
-        <div className="new-feedback-input">
+        <div
+          className={`new-feedback-input ${errors.description ? "error" : ""}`}
+        >
           <p className="title">Feedback Detail</p>
           <p className="txt">
             Include any specific comments on what should be improved, added,
             etc.
           </p>
-          <textarea value={value} onChange={handleChange}></textarea>
+          <textarea
+            value={detailValue}
+            onChange={handleChangeDetail}
+          ></textarea>
+          {errors.description && (
+            <p className="error-msg">{errors.description}</p>
+          )}
           <div className="new-feedback-buttons">
             <p className="feedback-btn add-btn">Add Feedback</p>
             <Link to="/" className="feedback-btn cancel-btn">
@@ -105,9 +154,14 @@ const NewFeedbackForm = (props) => {
             </Link>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
 
-export default NewFeedbackForm;
+const mapStateToProps = (state) => ({
+  currentUser: state.appData.currentUser,
+  productRequests: state.appData.productRequests,
+});
+
+export default connect(mapStateToProps)(NewFeedbackForm);

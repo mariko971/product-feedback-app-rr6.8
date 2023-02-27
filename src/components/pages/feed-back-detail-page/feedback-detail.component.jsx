@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { useLoaderData } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-import { commentsCount } from "../suggestions-page/suggestions-page-main/suggestion/suggestion.component";
+import { commentsCount } from "../../utils";
 
 import Suggestion from "../suggestions-page/suggestions-page-main/suggestion/suggestion.component";
 import FeedbackComment from "./feed-back-comments/feed-back-comments.components";
@@ -20,7 +20,6 @@ const FeedbackDetailPage = (props) => {
   const [requestData] = productRequests.filter(
     (request) => request.id === parseInt(requestID)
   );
-
   return (
     <div className="feedback-page">
       <div className="feedback-page-header">
