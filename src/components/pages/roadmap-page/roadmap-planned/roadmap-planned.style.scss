@@ -133,6 +133,12 @@ $upvote-hover-clr: #cfd7ff;
         color: $navy-blue-clr;
       }
     }
+    .voted {
+      background-color: $blue-clr;
+      p {
+        color: $white-clr;
+      }
+    }
   }
 }
 

@@ -10,7 +10,7 @@ import RoadmapLive from "./roadmap-live/roadmap-live.component";
 const RoadmapPage = (props) => {
   const [status, setStatus] = useState("in-progress");
   const {
-    appData: { productRequests },
+    appData: { productRequests, currentUser },
   } = props;
 
   const getRequests = (status) =>
@@ -36,7 +36,11 @@ const RoadmapPage = (props) => {
               </p>
             </div>
             {roadmapRequests.map((request) => (
-              <RoadmapInProgress key={request.id} {...request} />
+              <RoadmapInProgress
+                key={request.id}
+                {...request}
+                currentUser={currentUser}
+              />
             ))}
           </>
         );
@@ -49,7 +53,11 @@ const RoadmapPage = (props) => {
               <p className="roadmap-requests-header-txt">Released features</p>
             </div>
             {roadmapRequests.map((request) => (
-              <RoadmapLive key={request.id} {...request} />
+              <RoadmapLive
+                key={request.id}
+                {...request}
+                currentUser={currentUser}
+              />
             ))}
           </>
         );
@@ -64,7 +72,11 @@ const RoadmapPage = (props) => {
               </p>
             </div>
             {roadmapRequests.map((request) => (
-              <RoadmapPlanned key={request.id} {...request} />
+              <RoadmapPlanned
+                key={request.id}
+                {...request}
+                currentUser={currentUser}
+              />
             ))}
           </>
         );
@@ -125,7 +137,11 @@ const RoadmapPage = (props) => {
             </p>
           </div>
           {getRequests("planned").map((request) => (
-            <RoadmapPlanned key={request.id} {...request} />
+            <RoadmapPlanned
+              key={request.id}
+              {...request}
+              currentUser={currentUser}
+            />
           ))}
         </div>
         <div className="roadmap-request-inprogress">
@@ -138,7 +154,11 @@ const RoadmapPage = (props) => {
             </p>
           </div>
           {getRequests("in-progress").map((request) => (
-            <RoadmapInProgress key={request.id} {...request} />
+            <RoadmapInProgress
+              key={request.id}
+              {...request}
+              currentUser={currentUser}
+            />
           ))}
         </div>
         <div className="roadmap-request-live">
@@ -147,7 +167,11 @@ const RoadmapPage = (props) => {
             <p className="roadmap-requests-header-txt">Released features</p>
           </div>
           {getRequests("live").map((request) => (
-            <RoadmapLive key={request.id} {...request} />
+            <RoadmapLive
+              key={request.id}
+              {...request}
+              currentUser={currentUser}
+            />
           ))}
         </div>
       </div>

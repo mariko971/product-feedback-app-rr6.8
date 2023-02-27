@@ -14,13 +14,11 @@ const RoadmapInProgress = (props) => {
     category,
     upvotes,
     comments,
-    //productRequests,
     currentUser,
     upvoteAction,
   } = props;
 
   const voted = currentUser.votes.includes(`${id}`) ? "voted" : "";
-  // const request = productRequests.findIndex((req) => req.id === id);
 
   const voteAction = () => (!voted ? upvoteAction(id) : null);
 
@@ -32,7 +30,14 @@ const RoadmapInProgress = (props) => {
           onClick={() => voteAction()}
         >
           <div className="inprogress-suggestion-upvote-arrow">
-            <img src="/assets/shared/icon-arrow-up-blue.svg" alt="up arrow" />
+            <img
+              src={
+                !voted
+                  ? "/assets/shared/icon-arrow-up-blue.svg"
+                  : "/assets/shared/icon-arrow-up-white.svg"
+              }
+              alt="up arrow"
+            />
           </div>
           <p className="inprogress-suggestion-upvote-votes">{upvotes}</p>
         </div>

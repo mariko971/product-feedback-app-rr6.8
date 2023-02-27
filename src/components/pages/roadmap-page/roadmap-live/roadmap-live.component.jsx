@@ -4,29 +4,33 @@ import { connect } from "react-redux";
 
 import "./roadmap-live.style.scss";
 
-import { commentsCount } from "../../suggestions-page/suggestions-page-main/suggestion/suggestion.component";
-import { upvoterAction } from "../../../../redux/actions/upvote.action";
+import { commentsCount } from "../../../utils";
+import { upvoteAction } from "../../../../redux/actions/appData.action";
 
 const RoadmapLive = (props) => {
-  const {
-    id,
-    title,
-    description,
-    category,
-    upvotes,
-    comments,
-    appDataReducer,
-  } = props;
+  const { id, title, description, category, upvotes, comments, currentUser } =
+    props;
+
+  const voted = currentUser.votes.includes(`${id}`) ? "voted" : "";
+
+  const voteAction = () => (!voted ? upvoteAction(id) : null);
 
   return (
     <div className="live">
       <div className="live-suggestion live">
         <div
-          className="live-suggestion-upvote"
-          onClick={() => appDataReducer(id)}
+          className={`live-suggestion-upvote ${voted}`}
+          onClick={() => voteAction()}
         >
           <div className="live-suggestion-upvote-arrow">
-            <img src="/assets/shared/icon-arrow-up-blue.svg" alt="up arrow" />
+            <img
+              src={
+                !voted
+                  ? "/assets/shared/icon-arrow-up-blue.svg"
+                  : "/assets/shared/icon-arrow-up-white.svg"
+              }
+              alt="up arrow"
+            />
           </div>
           <p className="live-suggestion-upvote-votes">{upvotes}</p>
         </div>
@@ -52,7 +56,7 @@ const RoadmapLive = (props) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  appDataReducer: (id) => dispatch(upvoterAction(id)),
+  upvoteAction: (id) => dispatch(upvoteAction(id)),
 });
 
 export default connect(null, mapDispatchToProps)(RoadmapLive);
