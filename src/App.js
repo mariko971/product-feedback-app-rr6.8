@@ -1,5 +1,5 @@
-import React from "react";
-import { Outlet, useLoaderData } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Outlet } from "react-router-dom";
 import { connect } from "react-redux";
 
 import "./App.css";
@@ -9,9 +9,23 @@ import {
   updateRequestsAction,
 } from "./redux/actions/appData.action";
 
-function App() {
-  const data = useLoaderData();
-  console.log(data);
+function App({ updateCurrentUserAction, updateRequestsAction }) {
+  useEffect(() => {
+    const currentUserRef = firestore.collection("user");
+    const collectionRef = firestore.collection("productRequests");
+
+    currentUserRef.onSnapshot(async (snapshot) => {
+      const currentUserMap = snapshot.docs.reduce((acc, obj) => {
+        return (acc = { ...obj.data() });
+      }, {});
+      await updateCurrentUserAction(currentUserMap);
+    });
+
+    collectionRef.onSnapshot(async (snapshot) => {
+      const collectionMap = snapshot.docs.map((doc) => doc.data());
+      await updateRequestsAction(collectionMap);
+    });
+  }, [updateCurrentUserAction, updateRequestsAction]);
   return (
     <div className="App">
       <Outlet />
@@ -24,27 +38,3 @@ const mapDispatchToProps = (dispatch) => ({
   updateCurrentUserAction: (user) => dispatch(updateCurrentUserAction(user)),
 });
 export default connect(null, mapDispatchToProps)(App);
-
-export const loader = async () => {
-  let currentUserMap;
-  let collectionMap;
-  const collectionRef = firestore.collection("productRequests");
-
-  collectionRef.onSnapshot(async (snapshot) => {
-    collectionMap = snapshot.docs.map((doc) => doc.data());
-    console.log(collectionMap);
-    //isLoading(false);
-  });
-
-  const currentUserRef = firestore.collection("user");
-
-  currentUserRef.onSnapshot(async (snapshot) => {
-    currentUserMap = snapshot.docs.reduce((acc, obj) => {
-      return (acc = { ...obj.data() });
-    }, {});
-  });
-  updateCurrentUserAction(currentUserMap);
-  updateRequestsAction(collectionMap);
-
-  return { user: currentUserMap, collection: collectionMap };
-};
