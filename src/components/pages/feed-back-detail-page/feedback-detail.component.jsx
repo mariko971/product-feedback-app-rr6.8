@@ -20,7 +20,6 @@ const FeedbackDetailPage = (props) => {
   const [requestData] = productRequests.filter(
     (request) => request.id === parseInt(requestID)
   );
-
   return (
     <div className="feedback-page">
       <div className="feedback-page-header">
