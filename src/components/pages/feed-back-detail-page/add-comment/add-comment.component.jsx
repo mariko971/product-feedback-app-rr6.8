@@ -14,7 +14,7 @@ const AddCommentForm = ({
 
   const newID = () => {
     const feedback = productRequests.find((feed) => feed.id === requestID);
-    return Math.max(...feedback.comments.map((req) => req.id)) + 1;
+    return Math.max(...feedback.comments?.map((req) => req.id)) + 1;
   };
 
   const newComment = {

@@ -23,46 +23,6 @@ const appDataReducer = (state = app_Data, action) => {
         currentUser: { ...action.payload },
       };
     }
-    case "most votes": {
-      return {
-        ...state,
-        productRequests: [
-          ...state.productRequests.sort(function (a, b) {
-            return b.upvotes - a.upvotes;
-          }),
-        ],
-      };
-    }
-    case "least votes": {
-      return {
-        ...state,
-        productRequests: [
-          ...state.productRequests.sort(function (a, b) {
-            return a.upvotes - b.upvotes;
-          }),
-        ],
-      };
-    }
-    case "most comments": {
-      return {
-        ...state,
-        productRequests: [
-          ...state.productRequests.sort(function (a, b) {
-            return action.payload(b.comments) - action.payload(a.comments);
-          }),
-        ],
-      };
-    }
-    case "least comments": {
-      return {
-        ...state,
-        productRequests: [
-          ...state.productRequests.sort(function (a, b) {
-            return action.payload(a.comments) - action.payload(b.comments);
-          }),
-        ],
-      };
-    }
     case "UPVOTE_COMMENT": {
       const req = state.productRequests.find(
         (request) => request.id === action.payload

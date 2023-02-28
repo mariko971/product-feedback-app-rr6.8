@@ -2,7 +2,7 @@ const sortInit = {
   sortBy: "",
 };
 
-const sortByReducer = (state = sortInit, action) => {
+const suggestionsSortBy = (state = sortInit, action) => {
   switch (action.type) {
     case "SET_SORTBY":
       return {
@@ -14,4 +14,4 @@ const sortByReducer = (state = sortInit, action) => {
   }
 };
 
-export default sortByReducer;
+export default suggestionsSortBy;

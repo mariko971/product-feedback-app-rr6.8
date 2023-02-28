@@ -3,23 +3,17 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { sortByAction } from "../../../../../redux/actions/sortBy.action";
-import {
-  sortByLeastVotes,
-  sortByMostComments,
-  sortByMostVotes,
-  sortByLeastComments,
-} from "../../../../../redux/actions/appData.action";
-
 import "./suggestions-header.style.scss";
 
 const SuggestionsHeader = ({
-  sortByFilter: { sortBy },
   sortBytoggle,
   appData,
+  suggestionsSort: { sortBy },
 }) => {
+  console.log(sortBy);
   const [open, toggleOpen] = useState({ toggle: false, dropdown: "" });
-  const [sorter, toggleSorter] = useState("most-votes");
 
+  // function toggles the sort by dropdown
   const toggleDropdown = () => {
     if (!open.toggle) {
       toggleOpen({ toggle: true, dropdown: "open" });
@@ -28,13 +22,16 @@ const SuggestionsHeader = ({
     }
   };
 
+  // sets class to indicate the active sort .
   const checkSelected = (option, opt) => (option === opt ? opt : null);
 
-  const sortFilter = (sort, sortby) => {
+  /*
+    function closes the dropdown when user clicks an option,
+    dispatches the 'sortByAction.
+  */
+  const sortFilter = (sort) => {
     toggleDropdown();
     sortBytoggle(sort);
-    sortby();
-    toggleSorter(sort.split(" ").join("-"));
   };
 
   return (
@@ -51,32 +48,26 @@ const SuggestionsHeader = ({
       <div className={`suggestions-header-drpdown ${open.dropdown}`}>
         <ul className="sort-by">
           <li className="sort-by-option">
-            <p
-              className="sort-link"
-              onClick={() => sortFilter("most votes", sortByMostVotes)}
-            >
+            <p className="sort-link" onClick={() => sortFilter("most votes")}>
               Most Upvotes
             </p>
             <p
               className={`sort-by-option-check ${checkSelected(
                 "most-votes",
-                sorter
+                sortBy.split(" ").join("-")
               )}`}
             >
               <img src="assets/shared/icon-check.svg" alt="checked icon" />
             </p>
           </li>
           <li className="sort-by-option">
-            <p
-              className="sort-link"
-              onClick={() => sortFilter("least votes", sortByLeastVotes)}
-            >
+            <p className="sort-link" onClick={() => sortFilter("least votes")}>
               Least Upvotes
             </p>
             <p
               className={`sort-by-option-check ${checkSelected(
                 "least-votes",
-                sorter
+                sortBy.split(" ").join("-")
               )}`}
             >
               <img src="assets/shared/icon-check.svg" alt="checked icon" />
@@ -85,14 +76,14 @@ const SuggestionsHeader = ({
           <li className="sort-by-option">
             <p
               className="sort-link"
-              onClick={() => sortFilter("most comments", sortByMostComments)}
+              onClick={() => sortFilter("most comments")}
             >
               Most Comments
             </p>
             <p
               className={`sort-by-option-check ${checkSelected(
                 "most-comments",
-                sorter
+                sortBy.split(" ").join("-")
               )}`}
             >
               <img src="assets/shared/icon-check.svg" alt="checked icon" />
@@ -101,14 +92,14 @@ const SuggestionsHeader = ({
           <li className="sort-by-option">
             <p
               className="sort-link"
-              onClick={() => sortFilter("least comments", sortByLeastComments)}
+              onClick={() => sortFilter("least comments")}
             >
               Least Comments
             </p>
             <p
               className={`sort-by-option-check ${checkSelected(
                 "least-comments",
-                sorter
+                sortBy.split(" ").join("-")
               )}`}
             >
               <img src="assets/shared/icon-check.svg" alt="checked icon" />
@@ -137,15 +128,11 @@ const SuggestionsHeader = ({
 
 const mapDispatchToProps = (dispatch) => ({
   sortBytoggle: (sortby) => dispatch(sortByAction(sortby)),
-  sortByLeastVotes: () => dispatch(sortByLeastVotes()),
-  sortByMostComments: () => dispatch(sortByMostComments()),
-  sortByMostVotes: () => dispatch(sortByMostVotes()),
-  sortByLeastComments: () => dispatch(sortByLeastComments()),
 });
 
 const mapStateToProps = (state) => ({
   appData: state.appData,
-  sortByFilter: state.sortByFilter,
+  suggestionsSort: state.suggestionsSort,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SuggestionsHeader);

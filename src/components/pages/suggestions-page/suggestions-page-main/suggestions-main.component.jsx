@@ -5,17 +5,17 @@ import "./suggestions-main.style.scss";
 import Suggestion from "./suggestion/suggestion.component";
 import SuggestionsHeader from "./suggestion-header/suggestions-header.component";
 import Emptysuggestions from "./no-suggestions/no-suggestions.component";
-import { filterRequests } from "../../../utils";
+import { filterRequests, sortbyData } from "../../../utils";
 
 const SuggestionsMain = (props) => {
   const {
     appData: { productRequests, currentUser },
     suggestionsFilter: { filter },
+    suggestionsSort: { sortBy },
   } = props;
-  const requestsData =
-    filter === "all"
-      ? productRequests
-      : filterRequests(productRequests, filter);
+  const requestsData = sortBy
+    ? sortbyData(sortBy, [...filterRequests(productRequests, filter)])
+    : filterRequests(productRequests, filter);
   return (
     <div className="suggestion-main-wrapper">
       <SuggestionsHeader />
@@ -41,5 +41,6 @@ const SuggestionsMain = (props) => {
 const mapStateToProps = (state) => ({
   appData: state.appData,
   suggestionsFilter: state.suggestionsFilter,
+  suggestionsSort: state.suggestionsSort,
 });
 export default connect(mapStateToProps)(SuggestionsMain);
