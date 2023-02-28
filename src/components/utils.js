@@ -1,6 +1,10 @@
+// function filters product feedback based on there categories.
 export const filterRequests = (arr, filter) =>
-  arr.filter((item) => (item.category === filter ? item : null));
+  filter === "all"
+    ? arr
+    : arr.filter((item) => (item.category === filter ? item : null));
 
+// function calculates and returns number of comments given in a feedback.
 export const commentsCount = (comments) => {
   let count = 0;
   if (comments && comments.length > 0) {
@@ -13,33 +17,31 @@ export const commentsCount = (comments) => {
   } else return count;
 };
 
+// this function sorts feedback data according to given criteria.
 export const sortbyData = (sortBy, requestsData) => {
   switch (sortBy) {
     case "most votes": {
-      return requestsData.sort(function (a, b) {
-        return b.upvotes - a.upvotes;
-      });
+      return requestsData.sort((a, b) => b.upvotes - a.upvotes);
     }
     case "least votes": {
-      return requestsData.sort(function (a, b) {
-        return a.upvotes - b.upvotes;
-      });
+      return requestsData.sort((a, b) => a.upvotes - b.upvotes);
     }
     case "most comments": {
-      return requestsData.sort(function (a, b) {
-        return commentsCount(b.comments) - commentsCount(a.comments);
-      });
+      return requestsData.sort(
+        (a, b) => commentsCount(b.comments) - commentsCount(a.comments)
+      );
     }
     case "least comments": {
-      return requestsData.sort(function (a, b) {
-        return commentsCount(a.comments) - commentsCount(b.comments);
-      });
+      return requestsData.sort(
+        (a, b) => commentsCount(a.comments) - commentsCount(b.comments)
+      );
     }
     default:
       return requestsData;
   }
 };
 
+// function opens the input element for users to reply to comments.
 export const toggleReply = (reply, func) => {
   if (reply === "") {
     func("open");
@@ -68,6 +70,8 @@ export const newComments = (reply, productRequests, commentID, requestID) => {
   seqComments[commIndex] = seqComment;
   return seqComments;
 };
+
+// function to display errors in forms if inputs are invalid.
 
 export function validateInfo(values) {
   let errors = {};

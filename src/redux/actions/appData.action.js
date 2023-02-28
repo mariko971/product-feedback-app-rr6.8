@@ -1,5 +1,3 @@
-import { commentsCount } from "../../components/utils";
-
 export const updateRequestsAction = (requests) => ({
   type: "UPDATE_REQUESTS",
   payload: requests,
@@ -8,24 +6,6 @@ export const updateRequestsAction = (requests) => ({
 export const updateCurrentUserAction = (user) => ({
   type: "UPDATE_CURRENT_USER",
   payload: user,
-});
-
-export const sortByLeastVotes = () => ({
-  type: "least votes",
-});
-
-export const sortByMostComments = () => ({
-  type: "most comments",
-  payload: commentsCount,
-});
-
-export const sortByLeastComments = () => ({
-  type: "least comments",
-  payload: commentsCount,
-});
-
-export const sortByMostVotes = () => ({
-  type: "most votes",
 });
 
 export const addFeedbackAction = (feedback) => ({
