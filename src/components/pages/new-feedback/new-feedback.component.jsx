@@ -7,7 +7,7 @@ import "./new-feedback.style.scss";
 import { addFeedbackAction } from "../../../redux/actions/appData.action";
 import { validateInfo } from "../../utils";
 
-const NewFeedbackForm = ({ productRequests }) => {
+const NewFeedbackForm = ({ productRequests, addFeedbackAction }) => {
   const [category, setCategory] = useState("");
   const [dropdown, toggleDropdown] = useState({ open: false, class: "" });
   const [detailValue, setDetailValue] = useState("");
@@ -24,6 +24,7 @@ const NewFeedbackForm = ({ productRequests }) => {
     upvotes: 0,
     status: "suggestion",
     description: detailValue,
+    comments: [],
   };
 
   const handleClick = (option) => {
@@ -70,7 +71,7 @@ const NewFeedbackForm = ({ productRequests }) => {
         />
         <span className="back-link-txt">Go Back</span>
       </Link>
-      <form className="new-feedback" onSubmit={handleSubmit}>
+      <form className="new-feedback">
         <div className="new-feedback-icon">
           <img src="/assets/shared/icon-new-feedback.svg" alt="icon" />
         </div>
@@ -148,7 +149,9 @@ const NewFeedbackForm = ({ productRequests }) => {
             <p className="error-msg">{errors.description}</p>
           )}
           <div className="new-feedback-buttons">
-            <p className="feedback-btn add-btn">Add Feedback</p>
+            <p className="feedback-btn add-btn" onClick={handleSubmit}>
+              Add Feedback
+            </p>
             <Link to="/" className="feedback-btn cancel-btn">
               Cancel
             </Link>
@@ -164,4 +167,8 @@ const mapStateToProps = (state) => ({
   productRequests: state.appData.productRequests,
 });
 
-export default connect(mapStateToProps)(NewFeedbackForm);
+const mapDispatchToProps = (dispatch) => ({
+  addFeedbackAction: (newFeed) => dispatch(addFeedbackAction(newFeed)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewFeedbackForm);

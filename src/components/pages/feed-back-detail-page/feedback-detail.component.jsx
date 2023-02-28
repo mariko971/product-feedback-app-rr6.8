@@ -42,15 +42,17 @@ const FeedbackDetailPage = (props) => {
       </div>
       <Suggestion {...requestData} />
       <div className="comments-container">
-        <p className="comments-total">{`${commentsCount(
-          requestData.comments
-        )} Comments`}</p>
-        {requestData.comments.map((comment) => {
-          const { id } = comment;
-          return (
-            <FeedbackComment key={id} requestID={requestID} {...comment} />
-          );
-        })}
+        <p className="comments-total">{`${
+          requestData.comments.length ? commentsCount(requestData.comments) : 0
+        } Comments`}</p>
+        {requestData.comments.length
+          ? requestData.comments.map((comment) => {
+              const { id } = comment;
+              return (
+                <FeedbackComment key={id} requestID={requestID} {...comment} />
+              );
+            })
+          : null}
       </div>
       <AddCommentForm requestID={requestData.id} />
     </div>

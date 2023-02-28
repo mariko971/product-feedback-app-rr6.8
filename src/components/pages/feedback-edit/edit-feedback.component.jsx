@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLoaderData, Navigate, Link } from "react-router-dom";
+import { useLoaderData, useNavigate, Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 import "./edit-feedback.style.scss";
@@ -10,9 +10,11 @@ import {
 
 const FeedbackEditForm = (props) => {
   const requestID = useLoaderData();
-  console.log(requestID);
+  const navigate = useNavigate();
   const {
     appData: { productRequests },
+    editFeedbackAction,
+    deleteFeedbackAction,
   } = props;
 
   const feedback = productRequests.filter(
@@ -69,12 +71,12 @@ const FeedbackEditForm = (props) => {
 
   const handleSubmit = () => {
     editFeedbackAction(requestId, editedFeedback);
-    Navigate(`/feedback/${requestID}`);
+    navigate(`/feedback/${requestID}`);
   };
 
   const deleteSubmit = () => {
     deleteFeedbackAction(requestId);
-    Navigate("/");
+    navigate("/");
   };
 
   const handleTitleChange = (e) => setTitle(e.target.value);
