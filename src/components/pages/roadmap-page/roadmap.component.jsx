@@ -3,9 +3,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 import "./roadmap.style.scss";
-import RoadmapInProgress from "./roadmap-in-progress/roadmap-inprogress.component";
-import RoadmapPlanned from "./roadmap-planned/roadmap-planned.component";
-import RoadmapLive from "./roadmap-live/roadmap-live.component";
+import RoadmapCard from "./roadmap-card/roadmap-card";
 
 const RoadmapPage = (props) => {
   const [status, setStatus] = useState("in-progress");
@@ -36,7 +34,7 @@ const RoadmapPage = (props) => {
               </p>
             </div>
             {roadmapRequests.map((request) => (
-              <RoadmapInProgress
+              <RoadmapCard
                 key={request.id}
                 {...request}
                 currentUser={currentUser}
@@ -53,7 +51,7 @@ const RoadmapPage = (props) => {
               <p className="roadmap-requests-header-txt">Released features</p>
             </div>
             {roadmapRequests.map((request) => (
-              <RoadmapLive
+              <RoadmapCard
                 key={request.id}
                 {...request}
                 currentUser={currentUser}
@@ -72,7 +70,7 @@ const RoadmapPage = (props) => {
               </p>
             </div>
             {roadmapRequests.map((request) => (
-              <RoadmapPlanned
+              <RoadmapCard
                 key={request.id}
                 {...request}
                 currentUser={currentUser}
@@ -137,7 +135,7 @@ const RoadmapPage = (props) => {
             </p>
           </div>
           {getRequests("planned").map((request) => (
-            <RoadmapPlanned
+            <RoadmapCard
               key={request.id}
               {...request}
               currentUser={currentUser}
@@ -154,7 +152,7 @@ const RoadmapPage = (props) => {
             </p>
           </div>
           {getRequests("in-progress").map((request) => (
-            <RoadmapInProgress
+            <RoadmapCard
               key={request.id}
               {...request}
               currentUser={currentUser}
@@ -167,7 +165,7 @@ const RoadmapPage = (props) => {
             <p className="roadmap-requests-header-txt">Released features</p>
           </div>
           {getRequests("live").map((request) => (
-            <RoadmapLive
+            <RoadmapCard
               key={request.id}
               {...request}
               currentUser={currentUser}

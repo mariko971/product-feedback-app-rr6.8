@@ -10,12 +10,12 @@ $orange-light-clr: #f49f85;
 $white-clr: #ffffff;
 $upvote-hover-clr: #cfd7ff;
 
-.inprogress {
+.card-wrapper {
   &-requests {
     min-height: 100vh;
   }
 
-  &-suggestion {
+  .suggestion {
     background: $white-clr;
     width: 87%;
     height: 233px;
@@ -26,14 +26,14 @@ $upvote-hover-clr: #cfd7ff;
     cursor: pointer;
 
     &:hover {
-      .inprogress-suggestion-main {
+      &-main {
         &-title {
           color: $blue-clr;
         }
       }
     }
 
-    &.progress::before {
+    &::before {
       content: "";
       display: block;
       position: absolute;
@@ -45,6 +45,15 @@ $upvote-hover-clr: #cfd7ff;
       border-top-right-radius: 10px;
       background: $pink-clr;
       z-index: 1;
+    }
+    &.in-progress::before {
+      background: $pink-clr;
+    }
+    &.planned::before {
+      background: $orange-light-clr;
+    }
+    &.live::before {
+      background: $blue-clr;
     }
 
     &-status {
@@ -63,8 +72,14 @@ $upvote-hover-clr: #cfd7ff;
         display: inline-block;
         margin-right: 1rem;
       }
-      &.progress-clr::before {
+      &.in-progress-clr::before {
         background-color: $pink-clr;
+      }
+      &.planned-clr::before {
+        background-color: $orange-light-clr;
+      }
+      &.live-clr::before {
+        background-color: $blue-clr;
       }
     }
 
@@ -148,8 +163,8 @@ $upvote-hover-clr: #cfd7ff;
 }
 
 @media screen and (min-width: 768px) {
-  .inprogress {
-    &-suggestion {
+  .card-wrapper {
+    .suggestion {
       width: 100%;
       height: 251px;
       padding: 20px;
@@ -158,8 +173,8 @@ $upvote-hover-clr: #cfd7ff;
 }
 
 @media screen and (min-width: 996px) {
-  .inprogress {
-    &-suggestion {
+  .card-wrapper {
+    .suggestion {
       height: 272px;
       &-status {
         font-size: 16px;

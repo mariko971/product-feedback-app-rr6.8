@@ -20,7 +20,7 @@ const NewFeedbackForm = ({ productRequests, addFeedbackAction }) => {
   const newFeedback = {
     id: newID(),
     title: titleValue,
-    category: category,
+    category: category.toLowerCase(),
     upvotes: 0,
     status: "suggestion",
     description: detailValue,
