@@ -2,11 +2,11 @@ import React from "react";
 // import { withRouter } from 'react-router';
 import { connect } from "react-redux";
 
-import "./roadmap-inprogress.style.scss";
+import "./roadmap-card.style.scss";
 import { commentsCount } from "../../../utils";
 import { upvoteAction } from "../../../../redux/actions/appData.action";
 
-const RoadmapInProgress = (props) => {
+const RoadmapCard = (props) => {
   const {
     id,
     title,
@@ -16,6 +16,7 @@ const RoadmapInProgress = (props) => {
     comments,
     currentUser,
     upvoteAction,
+    status,
   } = props;
 
   const voted = currentUser.votes.includes(`${id}`) ? "voted" : "";
@@ -23,13 +24,13 @@ const RoadmapInProgress = (props) => {
   const voteAction = () => (!voted ? upvoteAction(id) : null);
 
   return (
-    <div className="inprogress">
-      <div className="inprogress-suggestion progress">
+    <div className="card-wrapper">
+      <div className={`suggestion ${status}`}>
         <div
-          className={`inprogress-suggestion-upvote ${voted}`}
+          className={`suggestion-upvote ${voted}`}
           onClick={() => voteAction()}
         >
-          <div className="inprogress-suggestion-upvote-arrow">
+          <div className="suggestion-upvote-arrow">
             <img
               src={
                 !voted
@@ -39,23 +40,21 @@ const RoadmapInProgress = (props) => {
               alt="up arrow"
             />
           </div>
-          <p className="inprogress-suggestion-upvote-votes">{upvotes}</p>
+          <p className="suggestion-upvote-votes">{upvotes}</p>
         </div>
-        <p className="inprogress-suggestion-status progress-clr">In-Progress</p>
-        <div className="inprogress-suggestion-main">
-          <h3 className="inprogress-suggestion-main-title">{title}</h3>
-          <p className="inprogress-suggestion-main-txt">{description}</p>
-          <p className="inprogress-suggestion-main-topic body-3">{category}</p>
+        <p className={`suggestion-status ${status}-clr`}>In-Progress</p>
+        <div className="suggestion-main">
+          <h3 className="suggestion-main-title">{title}</h3>
+          <p className="suggestion-main-txt">{description}</p>
+          <p className="suggestion-main-topic body-3">{category}</p>
         </div>
-        <div className="inprogress-suggestion-comments">
+        <div className="suggestion-comments">
           <img
-            className="inprogress-suggestion-comments-icon"
+            className="suggestion-comments-icon"
             src="/assets/shared/icon-comments.svg"
             alt="comments"
           />
-          <p className="inprogress-suggestion-comments-count">
-            {commentsCount(comments)}
-          </p>
+          <p className="suggestion-comments-count">{commentsCount(comments)}</p>
         </div>
       </div>
     </div>
@@ -71,4 +70,4 @@ const mapDispatchToProps = (dispatch) => ({
   upvoteAction: (id) => dispatch(upvoteAction(id)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(RoadmapInProgress);
+export default connect(mapStateToProps, mapDispatchToProps)(RoadmapCard);
